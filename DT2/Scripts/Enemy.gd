@@ -1,6 +1,13 @@
 extends KinematicBody2D
 
 onready var health_stat = $Health
+onready var ai = $AI
+onready var weapon = $Weapon
+
+
+func _ready():
+	ai.initialize(self, weapon)
+
 
 func handle_hit():
 	health_stat.health -= 20

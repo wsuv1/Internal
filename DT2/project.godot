@@ -18,16 +18,26 @@ _global_script_classes=[ {
 "class": "Player",
 "language": "GDScript",
 "path": "res://Scripts/Player.gd"
+}, {
+"base": "Node2D",
+"class": "Weapon",
+"language": "GDScript",
+"path": "res://Scripts/Weapon.gd"
 } ]
 _global_script_class_icons={
 "Bullet": "",
-"Player": ""
+"Player": "",
+"Weapon": ""
 }
 
 [application]
 
 config/name="DT2"
 config/icon="res://Textures/icon.png"
+
+[autoload]
+
+GlobalSignals="*res://global_signals/GlobalSignals.gd"
 
 [display]
 
