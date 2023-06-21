@@ -1,8 +1,8 @@
 extends KinematicBody2D
 
-var health: int = 100
+onready var health_stat = $Health
 
 func handle_hit():
-	health -= 20
-	if health <= 0:
+	health_stat.health -= 20
+	if health_stat.health <= 0:
 		queue_free()
