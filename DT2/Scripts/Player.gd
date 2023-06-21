@@ -1,18 +1,24 @@
 extends KinematicBody2D
+class_name Player
 
+signal player_fired_bullet(bullet, position, direction)
 
 export var speed = 100
 export var Bullet: PackedScene
+var health: int = 100
+
+# linking variables
 onready var Muzzle = $BulletSpawn
+onready var gun_direction = $GunDirection
+onready var attack_cooldown = $AttackCooldown
+onready var animation_player = $AnimationPlayer
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready():
-	pass # Replace with function body.
+	pass 
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 # Player Movement
-func _process(delta):
+func _physics_process(delta):
 	var movement_direction = Vector2.ZERO
 	
 	if Input.is_action_pressed("ui_up"):
@@ -28,16 +34,23 @@ func _process(delta):
 	move_and_slide(movement_direction * speed)
 
 	look_at(get_global_mouse_position())
-	
+
+
 # Calling shoot function
-func _unhandled_input(event): 
+func _unhandled_input(event: InputEvent): 
 	if event.is_action_released("shoot"):
 		shoot()
-		
+
+
 # Gun bullet repetition
 func shoot():
-	var bullet_instance = Bullet.instance()
-	add_child(bullet_instance)
-	bullet_instance.global_position = Muzzle.global_position
-	var target = get_global_mouse_position()
-	var direction_to_mouse = bullet_instance.global_position.direction_to(target).normalized 
+	if attack_cooldown.is_stopped():
+		var bullet_instance = Bullet.instance()
+		var direction = (gun_direction.global_position - Muzzle.global_position).normalized()
+		emit_signal("player_fired_bullet", bullet_instance, Muzzle.global_position, direction)
+		attack_cooldown.start()
+		animation_player.play("muzzle_flash")
+	
+func handle_hit():
+	health -= 20
+	print("player hit!", health)
