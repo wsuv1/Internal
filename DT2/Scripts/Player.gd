@@ -5,7 +5,7 @@ class_name Player
 export var speed = 100
 
 
-
+onready var team = $Team
 onready var weapon = $Weapon
 onready var health_stat = $Health
 
@@ -33,6 +33,10 @@ func _physics_process(delta):
 func _unhandled_input(event: InputEvent): 
 	if event.is_action_released("shoot"):
 		weapon.shoot()
+
+
+func get_team():
+	return team.team
 
 
 

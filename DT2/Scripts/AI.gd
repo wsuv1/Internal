@@ -10,19 +10,21 @@ enum State {
 	ENGAGE
 }
 
-onready var player_detection_zone = $PlayerDetectionZone
+onready var player_detection_zone = $DetectionZone
 onready var patrol_timer = $PatrolTimer
 
 var current_state: int = -1 setget set_state
 var character: KinematicBody2D = null
-var player: Player = null
+var target: KinematicBody2D = null
 var weapon: Weapon = null
+var team: int = -1
 
 # patrol state variables
 var origin: Vector2 = Vector2.ZERO
 var patrol_location: Vector2 = Vector2.ZERO
 var patrol_location_reached := false
 var character_velocity: Vector2 = Vector2.ZERO
+
 
 func _ready():
 	set_state(State.PATROL)
@@ -41,20 +43,21 @@ func _physics_process(delta):
 					character_velocity = Vector2.ZERO
 					patrol_timer.start()
 		State.ENGAGE:
-			if player != null and weapon != null:
-				character.rotate_toward(player.global_position)
-				var angle_to_player = character.global_position.direction_to(player.global_position).angle()
-				if abs(character.rotation - angle_to_player) < 0.1:
+			if target != null and weapon != null:
+				character.rotate_toward(target.global_position)
+				var angle_to_target = character.global_position.direction_to(target.global_position).angle()
+				if abs(character.rotation - angle_to_target) < 0.1:
 					weapon.shoot()
 			else:
-				print("In the engage state but no weapon/player.")
+				print("In the engage state but no weapon/target.")
 		_:
 			print("Error: found a state for our enemy that should not exist.")
 
 
-func initialize(character, weapon: Weapon):
+func initialize(character: KinematicBody2D, weapon: Weapon, team: int):
 	self.character = character
 	self.weapon = weapon
+	self.team = team
 
 
 # setting state of enemy AI
@@ -74,19 +77,6 @@ func set_state(new_state: int):
 	emit_signal("state_changed", current_state)
 
 
-
-# when player enters radius
-func _on_PlayerDetectionZone_body_entered(body: Node):
-	if body.is_in_group("player"):
-		set_state(State.ENGAGE)
-		player = body
-
-# when player exits radius
-func _on_PlayerDetectionZone_body_exited(body):
-	if player and body == player:
-		set_state(State.PATROL)
-		player = null
-
 # timing for enemy movement in patrol state
 func _on_PatrolTimer_timeout():
 	var patrol_range = 50
@@ -95,3 +85,15 @@ func _on_PatrolTimer_timeout():
 	patrol_location = Vector2(random_x, random_y) + origin
 	patrol_location_reached = false
 	character_velocity = character.velocity_toward(patrol_location)
+
+# player enters radius
+func _on_DetectionZone_body_entered(body):
+	if body.has_method("get_team") and body.get_team() != team:
+		set_state(State.ENGAGE)
+		target = body
+
+# player exits radius
+func _on_DetectionZone_body_exited(body):
+	if target and body == target:
+		set_state(State.PATROL)
+		target = null

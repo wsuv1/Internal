@@ -9,6 +9,7 @@
 script = ExtResource( 2 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 40, 48 )
 
 [node name="Enemy" parent="." instance=ExtResource( 4 )]
 position = Vector2( 288, 160 )
