@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 onready var health_stat = $Health
 onready var ai = $AI
-onready var weapon = $Weapon
+onready var weapon: Weapon = $Weapon
 onready var team = $Team
 
 
@@ -11,6 +11,7 @@ export var speed = 100
 
 func _ready():
 	ai.initialize(self, weapon, team.team)
+	weapon.initialize(team.team)
 
 # enemy rotation
 func rotate_toward(location: Vector2):
@@ -20,7 +21,7 @@ func rotate_toward(location: Vector2):
 func velocity_toward(location: Vector2):
 	return global_position.direction_to(location) * speed
 
-
+# assigning team
 func get_team():
 	return team.team
 
