@@ -38,11 +38,18 @@ func _physics_process(delta):
 func _unhandled_input(event: InputEvent): 
 	if event.is_action_released("shoot"):
 		weapon.shoot()
+	elif event.is_action_released("reload"):
+		weapon.start_reload()
 
 
+# reloading weapon
+func reload():
+	weapon.start_reload()
+
+
+# get team
 func get_team():
 	return team.team
-
 
 
 # health counter

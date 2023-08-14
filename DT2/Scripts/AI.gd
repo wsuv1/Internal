@@ -50,13 +50,16 @@ func _physics_process(delta):
 			else:
 				print("In the engage state but no weapon/target.")
 		_:
-			print("Error: found a state for our enemy that should not exist.")
+			print("Found a state for enemy that should not exist.")
 
 
+# call child nodes
 func initialize(character: KinematicBody2D, weapon: Weapon, team: int):
 	self.character = character
 	self.weapon = weapon
 	self.team = team
+	
+	weapon.connect("weapon_out_of_ammo", self, "handle_reload")
 
 
 # setting state of enemy AI
@@ -74,6 +77,10 @@ func set_state(new_state: int):
 
 	current_state = new_state
 	emit_signal("state_changed", current_state)
+
+
+func handle_reload():
+	weapon.start_reload()
 
 
 # timing for enemy movement in patrol state
