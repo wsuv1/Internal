@@ -28,3 +28,4 @@ shape = SubResource( 1 )
 position = Vector2( 27.227, 14.2322 )
 
 [node name="Team" parent="." instance=ExtResource( 4 )]
+team = 1
