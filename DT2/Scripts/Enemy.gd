@@ -1,4 +1,5 @@
 extends KinematicBody2D
+class_name Enemy
 
 onready var health_stat = $Health
 onready var ai = $AI
@@ -20,6 +21,9 @@ func rotate_toward(location: Vector2):
 # enemy velocity
 func velocity_toward(location: Vector2):
 	return global_position.direction_to(location) * speed
+
+func has_reached_position(location: Vector2):
+	return global_position.distance_to(location) < 5
 
 # assigning team
 func get_team():

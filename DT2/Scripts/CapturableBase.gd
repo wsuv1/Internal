@@ -1,4 +1,5 @@
 extends Area2D
+class_name CapturableBase
 
 signal base_captured(new_team)
 
@@ -42,12 +43,14 @@ func _on_CapturableBase_body_exited(body):
 		
 		check_whether_base_can_be_captured()
 
-
+# checking team that has majority in base 'zone' to capture
 func check_whether_base_can_be_captured():
 	var majority_team = get_team_with_majority()
 	
 	if majority_team == Team.TeamName.NEUTRAL:
-		return
+		print("Team evened out, stopping capture timer")
+		team_to_capture = Team.TeamName.NEUTRAL
+		capture_timer.stop()
 	elif majority_team == team.team:
 		print("Owning team regained majority, stopping capture timer")
 		team_to_capture = Team.TeamName.NEUTRAL
@@ -58,7 +61,7 @@ func check_whether_base_can_be_captured():
 		capture_timer.start()
 
 
-# calculating total allied or enemy units
+# calculating total allied or enemy units in majority
 func get_team_with_majority():
 	if enemy_unit_count == player_unit_count:
 		return Team.TeamName.NEUTRAL
@@ -67,6 +70,7 @@ func get_team_with_majority():
 	else:
 		return Team.TeamName.PLAYER
 
+# setting colour for team in majority
 func set_team(new_team: int):
 	team.team = new_team
 	emit_signal("base_captured", new_team)
