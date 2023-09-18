@@ -4,9 +4,10 @@ class_name Player
 
 signal died
 
-
+# export variables
 export var speed = 100
 
+# node variables
 onready var team = $Team
 onready var weapon: Weapon = $Weapon
 onready var health_stat = $Health
@@ -15,7 +16,6 @@ onready var camera_transform = $CameraTransform
 
 func _ready():
 	weapon.initialize(team.team)
-
 
 
 # Player Movement
@@ -44,6 +44,7 @@ func _unhandled_input(event: InputEvent):
 	elif event.is_action_released("reload"):
 		weapon.start_reload()
 
+
 # set camera
 func set_camera_transform(camera_path: NodePath):
 	camera_transform.remote_path = camera_path
@@ -64,6 +65,7 @@ func handle_hit():
 	health_stat.health -= 20
 	if health_stat.health <= 0:
 		die()
+
 
 # handle player death
 func die():

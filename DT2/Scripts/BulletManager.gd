@@ -1,5 +1,6 @@
 extends Node2D
 
+
 # bullet repetition
 func handle_bullet_spawned(bullet: Bullet, team: int, position: Vector2, direction: Vector2):
 	add_child(bullet)

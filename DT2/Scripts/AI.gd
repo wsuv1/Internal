@@ -1,9 +1,7 @@
 extends Node2D
 class_name AI
 
-
 signal state_changed(new_state)
-
 
 # enemy states
 enum State {
@@ -12,8 +10,10 @@ enum State {
 	ADVANCE
 }
 
+# node variables
 onready var patrol_timer = $PatrolTimer
 
+# player + enemy variables
 var current_state: int = -1 setget set_state
 var character: Enemy = null
 var target: KinematicBody2D = null
@@ -26,9 +26,8 @@ var patrol_location: Vector2 = Vector2.ZERO
 var patrol_location_reached := false
 var character_velocity: Vector2 = Vector2.ZERO
 
+# base variable
 var next_base: Vector2 =  Vector2.ZERO
-
-
 
 func _ready():
 	set_state(State.PATROL)
@@ -108,11 +107,13 @@ func _on_PatrolTimer_timeout():
 	patrol_location = Vector2(random_x, random_y) + origin
 	patrol_location_reached = false
 
+
 # player enters radius
 func _on_DetectionZone_body_entered(body):
 	if body.has_method("get_team") and body.get_team() != team:
 		set_state(State.ENGAGE)
 		target = body
+
 
 # player exits radius
 func _on_DetectionZone_body_exited(body):

@@ -1,23 +1,28 @@
 extends Node2D
 
+# state names
 enum BaseCaptureStartOrder {
 	FIRST,
 	LAST
 }
 
+# export variables
 export (BaseCaptureStartOrder) var base_capture_start_order
 export (Team.TeamName) var team_name = Team.TeamName.NEUTRAL
 export (PackedScene) var unit = null
 export (int) var max_units_alive = 4
 
+# base variables
 var target_base: CapturableBase = null
 var capturable_bases: Array = []
 var respawn_points: Array = []
 var next_spawn_to_use: int = 0
 
+# node variables
 onready var team = $Team
 onready var unit_container = $UnitContainer
 onready var respawn_timer = $RespawnTimer
+
 
 func initialize(capturable_bases: Array, respawn_points: Array):
 	if capturable_bases.size() == 0 or respawn_points.size() == 0 or unit == null:
@@ -30,7 +35,6 @@ func initialize(capturable_bases: Array, respawn_points: Array):
 	for respawn in respawn_points:
 		spawn_unit(respawn.global_position)
 	
-	
 	self.capturable_bases = capturable_bases
 	
 	for base in capturable_bases:
@@ -38,10 +42,11 @@ func initialize(capturable_bases: Array, respawn_points: Array):
 	
 	check_for_next_capturable_base()
 
+
 # once captured, go to next base
 func handle_base_captured(_new_team: int):
 	check_for_next_capturable_base()
-	
+
 
 # go to next base after one has been captured
 func check_for_next_capturable_base():
@@ -49,6 +54,7 @@ func check_for_next_capturable_base():
 	if next_base != null:
 		target_base = next_base
 		assign_next_capturable_base_to_units(next_base)
+
 
 # go to nearest base
 func get_next_capturable_base():
@@ -65,12 +71,13 @@ func get_next_capturable_base():
 	return null
 
 
+# assign base to units
 func assign_next_capturable_base_to_units(base: CapturableBase):
 	for unit in unit_container.get_children():
 		set_unit_ai_to_advance_to_next_base(unit)
 
 
-
+# spawn units into game
 func spawn_unit(spawn_location: Vector2):
 	var unit_instance = unit.instance()
 	unit_container.add_child(unit_instance)
@@ -79,6 +86,7 @@ func spawn_unit(spawn_location: Vector2):
 	set_unit_ai_to_advance_to_next_base(unit_instance)
 
 
+# upon spawning, set units to capture next base
 func set_unit_ai_to_advance_to_next_base(unit: Enemy):
 	if target_base != null:
 		var ai: AI = unit.ai
@@ -86,13 +94,12 @@ func set_unit_ai_to_advance_to_next_base(unit: Enemy):
 		ai.set_state(AI.State.ADVANCE)
 
 
-
 func handle_unit_death():
 	if respawn_timer.is_stopped() and unit_container.get_children().size() < max_units_alive:
 		respawn_timer.start()
 
 
-
+# keep track of spawn point and max units
 func _on_RespawnTimer_timeout():
 	var respawn = respawn_points[next_spawn_to_use]
 	spawn_unit(respawn.global_position)

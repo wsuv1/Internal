@@ -8,14 +8,16 @@ export (Color) var neutral_color = Color(1, 1, 1)
 export (Color) var player_color = Color(0.498039, 0.941176, 0.898039)
 export (Color) var enemy_color = Color(0.913725, 0.223529, 0.223529)
 
-
+# team variables
 var player_unit_count: int = 0
 var enemy_unit_count: int = 0
 var team_to_capture: int = Team.TeamName.NEUTRAL
 
+# node variables
 onready var team = $Team
 onready var capture_timer = $CaptureTimer
 onready var sprite = $Sprite
+
 
 # adding up allied and enemy units
 func _on_CapturableBase_body_entered(body):
@@ -30,6 +32,7 @@ func _on_CapturableBase_body_entered(body):
 			
 		check_whether_base_can_be_captured()
 
+
 # subtracting allied and enemy units
 func _on_CapturableBase_body_exited(body):
 	if body.has_method("get_team"):
@@ -42,6 +45,7 @@ func _on_CapturableBase_body_exited(body):
 			player_unit_count -= 1
 		
 		check_whether_base_can_be_captured()
+
 
 # checking team that has majority in base 'zone' to capture
 func check_whether_base_can_be_captured():
@@ -69,6 +73,7 @@ func get_team_with_majority():
 		return Team.TeamName.ENEMY
 	else:
 		return Team.TeamName.PLAYER
+
 
 # setting colour for team in majority
 func set_team(new_team: int):

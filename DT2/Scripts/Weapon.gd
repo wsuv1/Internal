@@ -4,6 +4,7 @@ class_name Weapon
 
 signal weapon_out_of_ammo
 
+# export variabbles
 export var Bullet: PackedScene
 
 #team variable
@@ -13,7 +14,7 @@ var team: int = -1
 var max_ammo: int = 10
 var current_ammo: int = max_ammo
 
-# linking weapon variables
+# node variables
 onready var Muzzle = $BulletSpawn
 onready var gun_direction = $GunDirection
 onready var attack_cooldown = $AttackCooldown

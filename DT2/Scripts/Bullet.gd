@@ -1,13 +1,16 @@
 extends Area2D
 class_name Bullet
 
+# export variables
 export var speed = 10
 
+# node variables
 onready var kill_timer = $KillTimer
 
-
+# normal variables
 var direction := Vector2.ZERO
 var team: int = -1
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -22,6 +25,7 @@ func _physics_process(delta):
 		
 		global_position += velocity
 
+
 # sets angle of gun/bullet
 func set_direction(direction: Vector2):
 	self.direction = direction
@@ -31,6 +35,7 @@ func set_direction(direction: Vector2):
 # times out bullet after being shot
 func _on_KillTimer_timeout():
 	queue_free()
+
 
 # if bullet hits enemy
 func _on_Bullet_body_entered(body):
