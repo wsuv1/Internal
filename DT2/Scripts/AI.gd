@@ -29,12 +29,14 @@ var character_velocity: Vector2 = Vector2.ZERO
 # base variable
 var next_base: Vector2 =  Vector2.ZERO
 
+# automatically set normal state to patrol
 func _ready():
 	set_state(State.PATROL)
 
+
 # when in enemy states:
-# engage - attacks player
-# patrol - stationary
+# engage - attacks player when player body has enterted detection zone
+# patrol - stationary, patrols an area until a body enters detection zone
 func _physics_process(delta):
 	match current_state:
 		State.PATROL:
@@ -65,7 +67,7 @@ func _physics_process(delta):
 			print("Found a state for enemy that should not exist.")
 
 
-# call child nodes
+# reference current nodes - handle weapon reload and ammo 
 func initialize(character: KinematicBody2D, weapon: Weapon, team: int):
 	self.character = character
 	self.weapon = weapon
@@ -78,7 +80,6 @@ func initialize(character: KinematicBody2D, weapon: Weapon, team: int):
 func set_state(new_state: int):
 	if new_state == current_state:
 		return
-
 
 # setting original state to patrol
 	if new_state == State.PATROL:
@@ -95,6 +96,7 @@ func set_state(new_state: int):
 	emit_signal("state_changed", current_state)
 
 
+# once R is pressed, weapon reload function is triggered
 func handle_reload():
 	weapon.start_reload()
 

@@ -13,6 +13,7 @@ onready var team = $Team
 export var speed = 100
 
 
+# get ai and weapon
 func _ready():
 	ai.initialize(self, weapon, team.team)
 	weapon.initialize(team.team)
@@ -28,6 +29,7 @@ func velocity_toward(location: Vector2):
 	return global_position.direction_to(location) * speed
 
 
+# look towards movement direction
 func has_reached_position(location: Vector2):
 	return global_position.distance_to(location) < 5
 
@@ -37,13 +39,14 @@ func get_team():
 	return team.team
 
 
-# health meter for enemy
+# health meter for enemy - measure until death
 func handle_hit():
 	health_stat.health -= 20
 	if health_stat.health <= 0:
 		die()
 
 
+# kill and remove enemy when health reaches 0 
 func die():
 	emit_signal("died")
 	queue_free()

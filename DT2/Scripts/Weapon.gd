@@ -22,10 +22,12 @@ onready var animation_player = $AnimationPlayer
 onready var muzzle_flash = $MuzzleFlash
 
 
+# hide muzzle animation when gun isn't shooting
 func _ready():
 	muzzle_flash.hide()
 
 
+# set team for weapon - avoid friendly fire
 func initialize(team: int):
 	self.team = team
 

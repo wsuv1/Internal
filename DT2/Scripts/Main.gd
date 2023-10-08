@@ -25,6 +25,7 @@ func _ready():
 	spawn_player()
 
 
+# spawn player into scene
 func spawn_player():
 	var player = Player.instance()
 	add_child(player)

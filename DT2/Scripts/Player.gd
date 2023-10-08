@@ -14,6 +14,7 @@ onready var health_stat = $Health
 onready var camera_transform = $CameraTransform
 
 
+# stop friendly fire
 func _ready():
 	weapon.initialize(team.team)
 

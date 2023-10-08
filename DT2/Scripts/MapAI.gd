@@ -24,6 +24,8 @@ onready var unit_container = $UnitContainer
 onready var respawn_timer = $RespawnTimer
 
 
+# alert error of base malfunction - set team to look for next capturable base
+# set respawn units
 func initialize(capturable_bases: Array, respawn_points: Array):
 	if capturable_bases.size() == 0 or respawn_points.size() == 0 or unit == null:
 		push_error("Forgot to initialize MapAI correctly")
@@ -56,7 +58,7 @@ func check_for_next_capturable_base():
 		assign_next_capturable_base_to_units(next_base)
 
 
-# go to nearest base
+# go to nearest base to capture
 func get_next_capturable_base():
 	var list_of_bases = range(capturable_bases.size()) 
 	if base_capture_start_order == BaseCaptureStartOrder.LAST:
@@ -71,7 +73,7 @@ func get_next_capturable_base():
 	return null
 
 
-# assign base to units
+# assign base to units for capture
 func assign_next_capturable_base_to_units(base: CapturableBase):
 	for unit in unit_container.get_children():
 		set_unit_ai_to_advance_to_next_base(unit)
@@ -94,12 +96,13 @@ func set_unit_ai_to_advance_to_next_base(unit: Enemy):
 		ai.set_state(AI.State.ADVANCE)
 
 
+# respawn unit when they are under max units
 func handle_unit_death():
 	if respawn_timer.is_stopped() and unit_container.get_children().size() < max_units_alive:
 		respawn_timer.start()
 
 
-# keep track of spawn point and max units
+# cycle spawn points after every respawn 
 func _on_RespawnTimer_timeout():
 	var respawn = respawn_points[next_spawn_to_use]
 	spawn_unit(respawn.global_position)

@@ -91,5 +91,6 @@ func set_team(new_team: int):
 			return
 
 
+# when timer ends, set back to neutral or team in majority
 func _on_CaptureTimer_timeout():
 	set_team(team_to_capture)
