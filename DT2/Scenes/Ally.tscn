@@ -8,7 +8,7 @@
 [ext_resource path="res://Scenes/Team.tscn" type="PackedScene" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 20.4371, 21.2903 )
+extents = Vector2( 16, 16 )
 
 [sub_resource type="CircleShape2D" id=2]
 radius = 160.0
@@ -17,14 +17,15 @@ radius = 160.0
 script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 2, 1.625 )
+position = Vector2( 4.76837e-07, 2.38419e-07 )
+scale = Vector2( 1.28, 1.23077 )
 texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
 [node name="Weapon" parent="." instance=ExtResource( 4 )]
-position = Vector2( 27.7129, 11.9635 )
+position = Vector2( 20.4585, 9.66334 )
 
 [node name="Health" parent="." instance=ExtResource( 3 )]
 

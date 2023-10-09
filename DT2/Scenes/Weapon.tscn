@@ -68,14 +68,15 @@ script = ExtResource( 1 )
 Bullet = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 1.035, 1.0375 )
+position = Vector2( -1.42109e-14, 2.38419e-07 )
+scale = Vector2( 0.64, 0.8 )
 texture = ExtResource( 4 )
 
 [node name="BulletSpawn" type="Position2D" parent="."]
-position = Vector2( 16, 0 )
+position = Vector2( 8, 0 )
 
 [node name="GunDirection" type="Position2D" parent="."]
-position = Vector2( 24, 0 )
+position = Vector2( 16, 0 )
 
 [node name="AttackCooldown" type="Timer" parent="."]
 wait_time = 0.7
