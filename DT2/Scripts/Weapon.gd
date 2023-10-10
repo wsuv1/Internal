@@ -2,7 +2,7 @@ extends Node2D
 class_name Weapon
 
 
-signal weapon_fired(new_ammo_count)
+signal weapon_ammo_changed(new_ammo_count)
 signal weapon_out_of_ammo
 
 # export variabbles
@@ -41,6 +41,7 @@ func start_reload():
 # cancel reload animation
 func _stop_reload():
 	current_ammo = max_ammo
+	emit_signal("weapon_ammo_changed", current_ammo)
 
 
 func set_current_ammo(new_ammo: int):
@@ -50,7 +51,7 @@ func set_current_ammo(new_ammo: int):
 		if current_ammo == 0:
 			emit_signal("weapon_out_of_ammo")
 		
-		emit_signal("weapon_fired", current_ammo)
+		emit_signal("weapon_ammo_changed", current_ammo)
 
 
 # function for shooting
