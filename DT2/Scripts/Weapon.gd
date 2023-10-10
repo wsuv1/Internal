@@ -2,6 +2,7 @@ extends Node2D
 class_name Weapon
 
 
+signal weapon_fired(new_ammo_count)
 signal weapon_out_of_ammo
 
 # export variabbles
@@ -12,7 +13,7 @@ var team: int = -1
 
 # ammo variables
 var max_ammo: int = 10
-var current_ammo: int = max_ammo
+var current_ammo: int = max_ammo setget set_current_ammo
 
 # node variables
 onready var Muzzle = $BulletSpawn
@@ -42,6 +43,16 @@ func _stop_reload():
 	current_ammo = max_ammo
 
 
+func set_current_ammo(new_ammo: int):
+	var actual_ammo = clamp(new_ammo, 0, max_ammo)
+	if actual_ammo != current_ammo:
+		current_ammo = actual_ammo
+		if current_ammo == 0:
+			emit_signal("weapon_out_of_ammo")
+		
+		emit_signal("weapon_fired", current_ammo)
+
+
 # function for shooting
 func shoot():
 	if current_ammo != 0 and attack_cooldown.is_stopped() and Bullet != null:
@@ -50,6 +61,4 @@ func shoot():
 		GlobalSignals.emit_signal("bullet_fired",  bullet_instance, team, Muzzle.global_position, direction)
 		attack_cooldown.start()
 		animation_player.play("muzzle_flash")
-		current_ammo -= 1
-		if current_ammo == 0:
-			emit_signal("weapon_out_of_ammo")
+		set_current_ammo(current_ammo - 1)

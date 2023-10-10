@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tilesheet_complete_2X.png-0e83ce3a7c0e6a8e8f231db0b8b882e3.stex"
+path="res://.import/tilesheet_complete_2X.png-012eef2e7e53b18832c3b45e597881bb.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/tilesheet_complete_2X.png"
-dest_files=[ "res://.import/tilesheet_complete_2X.png-0e83ce3a7c0e6a8e8f231db0b8b882e3.stex" ]
+source_file="res://Map_Tilesheets/tilesheet_complete_2X.png"
+dest_files=[ "res://.import/tilesheet_complete_2X.png-012eef2e7e53b18832c3b45e597881bb.stex" ]
 
 [params]
 
