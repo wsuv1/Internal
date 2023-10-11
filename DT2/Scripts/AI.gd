@@ -29,6 +29,9 @@ var character_velocity: Vector2 = Vector2.ZERO
 # base variable
 var next_base: Vector2 =  Vector2.ZERO
 
+# pathfinding variable
+var pathfinding: Pathfinding
+
 # automatically set normal state to patrol
 func _ready():
 	set_state(State.PATROL)
@@ -41,10 +44,12 @@ func _physics_process(delta):
 	match current_state:
 		State.PATROL:
 			if not patrol_location_reached:
-				character_velocity = character.velocity_toward(patrol_location)
-				character.move_and_slide(character_velocity)
-				character.rotate_toward(patrol_location)
-				if character.has_reached_position(patrol_location):
+				var path = pathfinding.get_new_path(global_position, patrol_location)
+				if path.size() > 1:
+					character_velocity = character.velocity_toward(path[1])
+					character.rotate_toward(path[1])
+					character.move_and_slide(character_velocity)
+				else: 
 					patrol_location_reached = true
 					character_velocity = Vector2.ZERO
 					patrol_timer.start()
@@ -57,12 +62,13 @@ func _physics_process(delta):
 			else:
 				print("In the engage state but no weapon/target.")
 		State.ADVANCE:
-			if character.has_reached_position(next_base):
-				set_state(State.PATROL)
-			else:
-				character_velocity = character.velocity_toward(next_base)
+			var path = pathfinding.get_new_path(global_position, next_base)
+			if path.size() > 1:
+				character_velocity = character.velocity_toward(path[1])
+				character.rotate_toward(path[1])
 				character.move_and_slide(character_velocity)
-				character.rotate_toward(next_base)
+			else:
+				set_state(State.PATROL)
 		_:
 			print("Found a state for enemy that should not exist.")
 
@@ -103,7 +109,7 @@ func handle_reload():
 
 # timing for enemy movement in patrol state
 func _on_PatrolTimer_timeout():
-	var patrol_range = 50
+	var patrol_range = 150
 	var random_x = rand_range(-patrol_range, patrol_range)
 	var random_y = rand_range(-patrol_range, patrol_range)
 	patrol_location = Vector2(random_x, random_y) + origin

@@ -17,6 +17,7 @@ var target_base: CapturableBase = null
 var capturable_bases: Array = []
 var respawn_points: Array = []
 var next_spawn_to_use: int = 0
+var pathfinding: Pathfinding
 
 # node variables
 onready var team = $Team
@@ -26,12 +27,13 @@ onready var respawn_timer = $RespawnTimer
 
 # alert error of base malfunction - set team to look for next capturable base
 # set respawn units
-func initialize(capturable_bases: Array, respawn_points: Array):
+func initialize(capturable_bases: Array, respawn_points: Array, pathfinding: Pathfinding):
 	if capturable_bases.size() == 0 or respawn_points.size() == 0 or unit == null:
 		push_error("Forgot to initialize MapAI correctly")
 		return
 	
 	team.team = team_name
+	self.pathfinding = pathfinding
 	
 	self.respawn_points = respawn_points
 	for respawn in respawn_points:
@@ -85,6 +87,7 @@ func spawn_unit(spawn_location: Vector2):
 	unit_container.add_child(unit_instance)
 	unit_instance.global_position = spawn_location
 	unit_instance.connect("died", self, "handle_unit_death")
+	unit_instance.ai.pathfinding = pathfinding
 	set_unit_ai_to_advance_to_next_base(unit_instance)
 
 
@@ -92,7 +95,7 @@ func spawn_unit(spawn_location: Vector2):
 func set_unit_ai_to_advance_to_next_base(unit: Enemy):
 	if target_base != null:
 		var ai: AI = unit.ai
-		ai.next_base = target_base.global_position
+		ai.next_base = target_base.get_random_position_within_capture_radius()
 		ai.set_state(AI.State.ADVANCE)
 
 
