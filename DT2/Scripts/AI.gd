@@ -10,8 +10,13 @@ enum State {
 	ADVANCE
 }
 
+
+# export variables
+export var should_draw_path_line := false
+
 # node variables
 onready var patrol_timer = $PatrolTimer
+onready var path_line = $PathLine
 
 # player + enemy variables
 var current_state: int = -1 setget set_state
@@ -35,12 +40,15 @@ var pathfinding: Pathfinding
 # automatically set normal state to patrol
 func _ready():
 	set_state(State.PATROL)
+	path_line.visible = should_draw_path_line
 
 
 # when in enemy states:
 # engage - attacks player when player body has enterted detection zone
 # patrol - stationary, patrols an area until a body enters detection zone
 func _physics_process(delta):
+	path_line.global_rotation = 0
+	
 	match current_state:
 		State.PATROL:
 			if not patrol_location_reached:
@@ -49,10 +57,12 @@ func _physics_process(delta):
 					character_velocity = character.velocity_toward(path[1])
 					character.rotate_toward(path[1])
 					character.move_and_slide(character_velocity)
+					set_path_line(path)
 				else: 
 					patrol_location_reached = true
 					character_velocity = Vector2.ZERO
 					patrol_timer.start()
+					path_line.clear_points()
 		State.ENGAGE:
 			if target != null and weapon != null:
 				character.rotate_toward(target.global_position)
@@ -67,8 +77,10 @@ func _physics_process(delta):
 				character_velocity = character.velocity_toward(path[1])
 				character.rotate_toward(path[1])
 				character.move_and_slide(character_velocity)
+				set_path_line(path)
 			else:
 				set_state(State.PATROL)
+				path_line.clear_points()
 		_:
 			print("Found a state for enemy that should not exist.")
 
@@ -80,6 +92,17 @@ func initialize(character: KinematicBody2D, weapon: Weapon, team: int):
 	self.team = team
 	
 	weapon.connect("weapon_out_of_ammo", self, "handle_reload")
+
+
+# set line2D to see pathfinding points of AI
+func set_path_line(points: Array):
+	var local_points := []
+	for point in points:
+		if point == points[0]:
+			local_points.append(Vector2.ZERO)
+		local_points.append(point - global_position)
+	
+	path_line.points = local_points
 
 
 # setting state of enemy AI
@@ -109,7 +132,7 @@ func handle_reload():
 
 # timing for enemy movement in patrol state
 func _on_PatrolTimer_timeout():
-	var patrol_range = 150
+	var patrol_range = 75
 	var random_x = rand_range(-patrol_range, patrol_range)
 	var random_y = rand_range(-patrol_range, patrol_range)
 	patrol_location = Vector2(random_x, random_y) + origin

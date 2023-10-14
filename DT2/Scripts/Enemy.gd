@@ -4,6 +4,7 @@ class_name Enemy
 signal died
 
 # node variables
+onready var collision_shape = $CollisionShape2D
 onready var health_stat = $Health
 onready var ai = $AI
 onready var weapon: Weapon = $Weapon

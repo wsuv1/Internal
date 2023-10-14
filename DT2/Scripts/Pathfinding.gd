@@ -72,7 +72,10 @@ func update_navigation_map():
 				if astar.has_point(id):
 					astar.set_point_disabled(id, true)
 		if obstacle is KinematicBody2D:
-			pass
+			var title_coord = tilemap.world_to_map(obstacle.collision_shape.global_position)
+			var id = get_id_for_point(title_coord)
+			if astar.has_point(id):
+				astar.set_point_disabled(id, true)
 
 
 # start - end coordinates 

@@ -5,7 +5,7 @@
 [ext_resource path="res://Atlas_Texture/tilesheet_complete.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 250, 250 )
+extents = Vector2( 175, 175 )
 
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
