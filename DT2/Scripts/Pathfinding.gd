@@ -1,11 +1,20 @@
 extends Node2D
 class_name Pathfinding
 
+# export variables
+export (Color) var enabled_colour 
+export (Color) var disabled_colour 
+export var should_display_grid := false
+
 # variables
 var astar = AStar2D.new()
 var tilemap: TileMap
 var half_cell_size: Vector2
 var used_rect: Rect2
+var grid_rects := {}
+
+# onready variables
+onready var grid = $Grid
 
 
 func _physics_process(delta):
@@ -25,11 +34,26 @@ func create_navigation_map(tilemap: TileMap):
 	connect_traversable_tiles(tiles)
 
 
-# add tiles that AI can travel
+# add points that AI can travel, show grids in pathfinding mode
 func add_traversable_tiles(tiles: Array):
 	for tile in tiles:
 		var id = get_id_for_point(tile)
 		astar.add_point(id, tile)
+		
+		if should_display_grid:
+			var rect := ColorRect.new()
+			grid.add_child(rect)
+			
+			grid_rects[str(id)] = rect
+			
+			rect.modulate = Color(1, 1, 1, 0.5)
+			rect.color = enabled_colour
+			
+			rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			
+			rect.rect_size = tilemap.cell_size
+			rect.rect_position = tilemap.map_to_world(tile)
+
 
 
 # connect tiles that AI can travel
@@ -61,6 +85,8 @@ func get_id_for_point(point: Vector2):
 func update_navigation_map():
 	for point in astar.get_points():
 		astar.set_point_disabled(point, false)
+		if should_display_grid:
+			grid_rects[str(point)].color = enabled_colour
 	
 	var obstacles = get_tree().get_nodes_in_group("obstacles")
 	
@@ -71,11 +97,15 @@ func update_navigation_map():
 				var id = get_id_for_point(tile)
 				if astar.has_point(id):
 					astar.set_point_disabled(id, true)
+					if should_display_grid:
+						grid_rects[str(id)].color = disabled_colour
 		if obstacle is KinematicBody2D:
 			var title_coord = tilemap.world_to_map(obstacle.collision_shape.global_position)
 			var id = get_id_for_point(title_coord)
 			if astar.has_point(id):
 				astar.set_point_disabled(id, true)
+				if should_display_grid:
+					grid_rects[str(id)].color = disabled_colour
 
 
 # start - end coordinates 

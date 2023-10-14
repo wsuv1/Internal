@@ -63,6 +63,7 @@ _global_script_class_icons={
 [application]
 
 config/name="DT2"
+run/main_scene="res://Scenes/Main.tscn"
 config/icon="res://Textures/icon.png"
 
 [autoload]

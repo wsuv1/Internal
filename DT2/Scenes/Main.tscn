@@ -10,7 +10,7 @@
 [ext_resource path="res://Scripts/CapturableBaseManager.gd" type="Script" id=8]
 [ext_resource path="res://Map_Tilesheets/allSprites_default.png" type="Texture" id=9]
 [ext_resource path="res://Scenes/GUI.tscn" type="PackedScene" id=10]
-[ext_resource path="res://Scripts/Pathfinding.gd" type="Script" id=11]
+[ext_resource path="res://Scenes/Pathfinding.tscn" type="PackedScene" id=11]
 
 [sub_resource type="TileSet" id=1]
 0/name = "grass"
@@ -938,8 +938,7 @@ position = Vector2( 76.6941, 285.373 )
 current = true
 smoothing_enabled = true
 
-[node name="Pathfinding" type="Node2D" parent="."]
-script = ExtResource( 11 )
+[node name="Pathfinding" parent="." instance=ExtResource( 11 )]
 
 [node name="CapturableBaseManager" type="Node2D" parent="."]
 script = ExtResource( 8 )

@@ -96,6 +96,9 @@ func initialize(character: KinematicBody2D, weapon: Weapon, team: int):
 
 # set line2D to see pathfinding points of AI
 func set_path_line(points: Array):
+	if not should_draw_path_line:
+		return
+
 	var local_points := []
 	for point in points:
 		if point == points[0]:
