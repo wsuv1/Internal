@@ -2,6 +2,11 @@ extends CanvasLayer
 
 # node variables
 onready var title = $PanelContainer/MarginContainer/Rows/Title
+onready var animation_player = $AnimationPlayer
+
+
+func _ready():
+	animation_player.play("Fade")
 
 
 # set title text and colour when game has been won/lost

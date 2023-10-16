@@ -18,6 +18,13 @@ onready var collision_shape =  $CollisionShape2D
 onready var team = $Team
 onready var capture_timer = $CaptureTimer
 onready var sprite = $Sprite
+onready var player_label = $PlayerLabel
+onready var enemy_label = $EnemyLabel
+
+
+func _ready():
+	player_label.text = "0"
+	enemy_label.text = "0"
 
 
 func get_random_position_within_capture_radius() -> Vector2:
@@ -37,10 +44,12 @@ func _on_CapturableBase_body_entered(body):
 		
 		if body_team == Team.TeamName.ENEMY:
 			enemy_unit_count += 1
-			
+			change_enemy_label()
+		
 		elif body_team == Team.TeamName.PLAYER:
 			player_unit_count += 1
-			
+			change_player_label()
+		
 		check_whether_base_can_be_captured()
 
 
@@ -51,11 +60,23 @@ func _on_CapturableBase_body_exited(body):
 		
 		if body_team == Team.TeamName.ENEMY:
 			enemy_unit_count -= 1
-			
+			change_enemy_label()
+		
 		elif body_team == Team.TeamName.PLAYER:
 			player_unit_count -= 1
+			change_player_label()
 		
 		check_whether_base_can_be_captured()
+
+
+# change base label for player count
+func change_player_label():
+	player_label.text = str(player_unit_count)
+
+
+# change base label for enemy count
+func change_enemy_label():
+	enemy_label.text = str(enemy_unit_count)
 
 
 # checking team that has majority in base 'zone' to capture
