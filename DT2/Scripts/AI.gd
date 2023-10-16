@@ -134,7 +134,7 @@ func handle_reload():
 
 # timing for enemy movement in patrol state
 func _on_PatrolTimer_timeout():
-	var patrol_range = 70
+	var patrol_range = 80
 	var random_x = rand_range(-patrol_range, patrol_range)
 	var random_y = rand_range(-patrol_range, patrol_range)
 	patrol_location = Vector2(random_x, random_y) + origin
