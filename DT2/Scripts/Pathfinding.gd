@@ -34,7 +34,7 @@ func create_navigation_map(tilemap: TileMap):
 	connect_traversable_tiles(tiles)
 
 
-# add points that AI can travel, show grids in pathfinding mode
+# add points that AI can travel, show grids in pathfinding debug
 func add_traversable_tiles(tiles: Array):
 	for tile in tiles:
 		var id = get_id_for_point(tile)

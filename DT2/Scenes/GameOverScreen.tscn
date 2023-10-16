@@ -1,0 +1,90 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://GUI_Additions/Pixelify_Sans.tres" type="DynamicFont" id=1]
+[ext_resource path="res://GUI_Additions/Pixelify_Sans_64.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Scripts/GameOverScreen.gd" type="Script" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.952941, 0.823529, 0.890196, 1 )
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color( 1, 1, 1, 1 )
+border_blend = true
+shadow_color = Color( 0.933333, 0.733333, 0.890196, 0.6 )
+shadow_size = 20
+
+[node name="GameOverScreen" type="CanvasLayer"]
+pause_mode = 2
+script = ExtResource( 3 )
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1014.0
+margin_bottom = 590.0
+custom_constants/margin_right = 40
+custom_constants/margin_top = 40
+custom_constants/margin_left = 40
+custom_constants/margin_bottom = 40
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Rows" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+margin_left = 40.0
+margin_top = 40.0
+margin_right = 964.0
+margin_bottom = 540.0
+custom_constants/separation = 80
+
+[node name="Title" type="Label" parent="PanelContainer/MarginContainer/Rows"]
+margin_right = 924.0
+margin_bottom = 77.0
+custom_fonts/font = ExtResource( 2 )
+text = "GAME OVER"
+align = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/MarginContainer/Rows"]
+margin_top = 157.0
+margin_right = 924.0
+margin_bottom = 299.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/Rows/CenterContainer"]
+margin_left = 375.0
+margin_right = 548.0
+margin_bottom = 142.0
+custom_constants/separation = 40
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RestartButton" type="Button" parent="PanelContainer/MarginContainer/Rows/CenterContainer/VBoxContainer"]
+margin_right = 173.0
+margin_bottom = 51.0
+custom_fonts/font = ExtResource( 1 )
+text = " RESTART "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="QuitButton" type="Button" parent="PanelContainer/MarginContainer/Rows/CenterContainer/VBoxContainer"]
+margin_top = 91.0
+margin_right = 173.0
+margin_bottom = 142.0
+custom_fonts/font = ExtResource( 1 )
+text = " QUIT "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="PanelContainer/MarginContainer/Rows/CenterContainer/VBoxContainer/RestartButton" to="." method="_on_RestartButton_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/Rows/CenterContainer/VBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
